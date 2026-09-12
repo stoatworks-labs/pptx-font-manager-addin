@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Font Manager</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fg: #201f1e; --muted: #605e5c; --bg: #faf9f8; --card: #fff; --line: #edebe9;
+        --brand: #0f6cbd; --ok: #107c10; --miss: #c50f1f; --warn: #8a6d00; --emb: #8661c5;
+        font: 13px/1.45 "Segoe UI", -apple-system, system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root { --fg: #f3f2f1; --muted: #a19f9d; --bg: #201f1e; --card: #292827; --line: #3b3a39; --brand: #479ef5; }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; padding: 12px; color: var(--fg); background: var(--bg); }
+      h1 { font-size: 15px; margin: 0 0 2px; }
+      p.sub { color: var(--muted); margin: 0 0 12px; }
+      button { font: inherit; font-weight: 600; padding: 6px 12px; border-radius: 4px; border: 1px solid var(--brand); background: var(--brand); color: #fff; cursor: pointer; }
+      button.secondary { background: transparent; color: var(--brand); }
+      button:disabled { opacity: .5; cursor: default; }
+      .bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+      #status { color: var(--muted); min-height: 1.4em; margin: 6px 0; }
+      #error, #winnote { border-radius: 4px; padding: 8px 10px; margin: 8px 0; font-size: 12px; }
+      #error { background: #fde7e9; color: #a4262c; border: 1px solid #f3d6d8; }
+      #winnote { background: #fff4ce; color: #6b5900; border: 1px solid #f7e6a1; }
+      @media (prefers-color-scheme: dark) { #error { background: #3b1f22; color: #f1a7ad; border-color:#5a2b30 } #winnote { background:#3a3320; color:#e8cf7a; border-color:#5a4f2a } }
+      #summary { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin: 8px 0; }
+      #summary .stat { white-space: nowrap; }
+      #summary .stat b { font-size: 16px; }
+      #summary .note { flex-basis: 100%; color: var(--muted); font-size: 12px; }
+      .small { font-size: 11px; }
+      .muted { color: var(--muted); }
+      .row { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: start; padding: 8px 0; border-top: 1px solid var(--line); }
+      .row .name .fam { font-weight: 600; }
+      .row .name .tier { color: var(--muted); font-size: 11px; }
+      .row .state { text-align: right; }
+      .row .actions { grid-column: 1 / -1; display: flex; gap: 6px; flex-wrap: wrap; }
+      .row .actions:empty { display: none; }
+      .chip { font-size: 11px; font-weight: 700; }
+      .chip.ok { color: var(--ok); } .chip.miss { color: var(--miss); } .chip.warn { color: var(--warn); } .chip.emb { color: var(--emb); }
+      .actions button { padding: 3px 8px; font-size: 12px; font-weight: 600; }
+      .actions button.sub { background: transparent; color: var(--brand); }
+      .actions button.metric { border-style: solid; }
+      .actions .link { color: var(--brand); font-size: 12px; align-self: center; }
+      [hidden] { display: none !important; }
+    </style>
+  </head>
+  <body>
+    <h1>Font Manager</h1>
+    <p class="sub">The fonts this deck uses, which are installed here, and the missing ones to fetch.</p>
+
+    <div class="bar">
+      <button id="scan" disabled>Scan this presentation</button>
+      <button id="bundle" class="secondary" disabled>Build font bundle (.zip)</button>
+    </div>
+
+    <div id="status">Waiting for PowerPoint…</div>
+    <div id="error" hidden></div>
+    <div id="winnote" hidden></div>
+
+    <div id="results" hidden>
+      <div id="summary"></div>
+      <div id="rows"></div>
+    </div>
+
+    <script type="module" src="/src/taskpane.ts"></script>
+  </body>
+</html>
