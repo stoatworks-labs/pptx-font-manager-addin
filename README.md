@@ -4,8 +4,8 @@
 > directed and reviewed by a human. The checker path — get the deck bytes, scan
 > them, probe what's installed — is **verified running inside real PowerPoint for
 > Mac** (16.112, WKWebView). The download/bundle path reuses the web app's
-> proven code but its in-webview *delivery* is not yet verified on Mac — see
-> [Findings](#findings).
+> proven code, and its in-webview *delivery* is now verified on Mac too (it
+> raises a native Save dialog) — see [Findings](#findings).
 
 An Office task-pane add-in that does, inside PowerPoint, what
 [pptx-font-manager](https://github.com/stoatworks-labs/pptx-font-manager) does in
@@ -83,11 +83,12 @@ Measured on PowerPoint for Mac 16.112 on 2026-09-12:
   corrupt it raises its "couldn't read some content… and removed it" repair
   dialog, and returns the *repaired* bytes. Fine for font scanning; just be aware
   the bytes aren't always identical to the file on disk.
-- **Unverified: file delivery in the Mac webview.** The download / bundle uses a
-  blob + `<a download>` (works in Chromium/WebView2). WKWebView has historically
-  blocked programmatic downloads; [`src/download.ts`](src/download.ts) falls back
-  to opening the blob in a window. This needs testing on Mac before the fix path
-  is trusted there.
+- **Verified: file delivery works on Mac.** A blob + `<a download>` click raises
+  a native **Save As** dialog in PowerPoint for Mac's WKWebView (tested
+  2026-09-12: the pane offered `font-manager-delivery-test.txt` into ~/Downloads).
+  WKWebView blocks the `window.open` popup fallback, but the anchor path — the one
+  [`src/download.ts`](src/download.ts) uses first — works, so the fallback isn't
+  needed there. It stays for any host that blocks the anchor.
 
 ## Layout
 

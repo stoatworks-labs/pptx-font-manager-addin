@@ -1,11 +1,11 @@
 // Handing a file to the user from inside a task pane.
 //
-// UNKNOWN, flagged for verification: the standard blob + <a download> click is
-// what the web app uses and works in Chromium (Windows WebView2). WKWebView on
-// Mac has historically blocked programmatic downloads, so this may be inert in
-// Mac PowerPoint. We try the anchor first and fall back to opening the blob in
-// a new window (which the user can then save). Until this is tested on Mac,
-// treat a bundle download there as unproven — see README §Findings.
+// VERIFIED on Mac (2026-09-12): the blob + <a download> click raises a native
+// Save As dialog in PowerPoint for Mac's WKWebView, and works in Chromium
+// (Windows WebView2) too. WKWebView blocks the window.open popup, so that
+// fallback is inert there — but the anchor path runs first and succeeds, so the
+// fallback only matters for a host that blocks the anchor instead. See README
+// §Findings.
 
 export type DeliveryOutcome = 'downloaded' | 'opened-in-window' | 'blocked'
 
