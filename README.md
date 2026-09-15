@@ -39,6 +39,17 @@ installed copy.
 The install page at the origin's root says the same thing.
 
 <!-- downloads:start -->
+
+## Download
+
+**[v0.1.0](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/tag/v0.1.0)**
+
+This release contains:
+
+- [`manifest.xml`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/manifest.xml) — Office add-in manifest (sideload into PowerPoint), 5 KB
+
+All builds, checksums and release notes: [github.com/stoatworks-labs/pptx-font-manager-addin/releases](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases).
+
 <!-- downloads:end -->
 
 ## Status
