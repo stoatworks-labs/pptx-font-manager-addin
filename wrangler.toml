@@ -35,6 +35,16 @@ compatibility_date = "2026-07-30"
 
 [assets]
 directory = "./dist"
+# Serve exactly the paths the manifest names. The runtime's default
+# ("auto-trailing-slash") answers /taskpane.html with a 307 to /taskpane, and
+# that URL is the one every installed manifest hands PowerPoint — a redirect on
+# it is a needless failure mode on four different webviews, and deploy.yml's
+# live check reads /taskpane.html without following redirects. "none" serves
+# every file at its own name only — so / would 404 — and public/_redirects puts
+# back exactly that one mapping as a 200 rewrite. Verified live 2026-09-15:
+# /, /index.html, /taskpane.html, /manifest.xml all 200, /taskpane and unknown
+# paths 404, no redirects anywhere.
+html_handling = "none"
 
 # The public hostname, declared here rather than clicked into the dashboard.
 # `custom_domain = true` makes wrangler create the DNS record and the Worker
