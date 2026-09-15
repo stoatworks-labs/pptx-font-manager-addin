@@ -139,6 +139,8 @@ async function makeBundle() {
   }
 }
 
+$('version').textContent = `Font Manager v${__APP_VERSION__}`
+
 Office.onReady((info) => {
   if (info.host !== Office.HostType.PowerPoint) {
     $('status').textContent = 'This add-in runs in PowerPoint.'

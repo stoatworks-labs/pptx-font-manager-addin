@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Font Manager for PowerPoint — add-in</title>
+    <meta name="description" content="A PowerPoint add-in that scans the open deck for the fonts it actually uses, checks which are installed on this machine, and fetches the missing ones. Install it by sideloading one manifest file." />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <meta property="og:title" content="Font Manager for PowerPoint — add-in" />
+    <meta property="og:description" content="Which fonts does this deck actually use, and which are missing here? Answered inside PowerPoint, with the missing ones a click away." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pptx-font-manager-addin.stoatworks-labs.com/" />
+    <meta property="og:image" content="https://pptx-font-manager-addin.stoatworks-labs.com/icons/icon-80.png" />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --fg: #201f1e; --muted: #605e5c; --bg: #faf9f8; --card: #fff; --line: #edebe9;
+        --brand: #a8541c; --brand-ink: #fbfbfa; --ok: #107c10; --warn: #8a6d00;
+        --sw-support-accent: var(--brand);
+        font: 15px/1.55 -apple-system, "Segoe UI", system-ui, sans-serif;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root { --fg: #f3f2f1; --muted: #a19f9d; --bg: #201f1e; --card: #292827; --line: #3b3a39; --brand: #e08a4e; }
+      }
+      * { box-sizing: border-box; }
+      body { margin: 0; color: var(--fg); background: var(--bg); }
+      main { max-width: 760px; margin: 0 auto; padding: 40px 20px 24px; }
+      header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+      header img { width: 56px; height: 56px; border-radius: 12px; flex: none; }
+      h1 { font-size: 28px; line-height: 1.15; margin: 0; }
+      h1 small { display: block; font-size: 15px; font-weight: 500; color: var(--muted); margin-top: 4px; }
+      h2 { font-size: 19px; margin: 32px 0 10px; }
+      h3 { font-size: 15px; margin: 18px 0 6px; }
+      p, li { margin: 0 0 10px; }
+      a { color: var(--brand); }
+      code, kbd { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; overflow-wrap: anywhere; }
+      .lede { font-size: 17px; }
+      .cta { display: inline-flex; align-items: center; gap: 8px; margin: 12px 0 4px; padding: 10px 16px; border-radius: 6px; background: var(--brand); color: var(--brand-ink); font-weight: 600; text-decoration: none; }
+      .cta:hover { filter: brightness(1.08); }
+      .meta { color: var(--muted); font-size: 13px; margin-top: 6px; }
+      .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
+      .card h3 { margin-top: 0; }
+      .status { border-left: 4px solid var(--warn); }
+      ol { padding-left: 22px; }
+      ol li { margin-bottom: 8px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+      .grid .card { margin: 0; }
+      .fine { color: var(--muted); font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="/icons/icon-80.png" width="56" height="56" alt="" />
+        <h1>Font Manager for PowerPoint<small>An add-in, from Stoatworks Labs · <span id="version"></span></small></h1>
+      </header>
+
+      <p class="lede">Which fonts does this deck <em>actually</em> use, and which of them are missing on the machine that is about to present it? This add-in answers that inside PowerPoint — no upload, no drag-and-drop — and offers the missing ones as real downloads, metric-compatible substitutes, or a sidecar bundle to carry with the file.</p>
+
+      <p>It is the same scanner as the <a href="https://pptx-font-manager.stoatworks-labs.com">PowerPoint Font Manager web tool</a>, run on the open presentation instead of a file you drop in. It ignores the thirty-odd script-fallback fonts every Office theme names whether or not a single such character appears, and it resolves face names — “Helvetica Neue Medium”, “Poppins Regular” — to the families they belong to before it calls anything missing.</p>
+
+      <a class="cta" href="/manifest.xml" download="manifest.xml">Download manifest.xml</a>
+      <p class="meta">One small XML file. It points PowerPoint at this site; nothing is installed on your machine. <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin">Source and issues on GitHub</a> · <a href="https://stoatworks-labs.com/software/pptx-font-manager-addin/">Project page</a></p>
+
+      <div class="card status">
+        <h3>Where it has been proven</h3>
+        <p>Verified end to end in <strong>PowerPoint for Mac</strong> (16.112): reading the open deck, scanning it, checking installed fonts, and saving a fetched font through the native Save dialog. <strong>PowerPoint for Windows and PowerPoint on the web are supported by the manifest but have not been tested yet.</strong> If you try either, <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/issues">say how it went</a>.</p>
+      </div>
+
+      <h2>Install</h2>
+      <p>Office add-ins install from a manifest. Download the file above, then:</p>
+
+      <h3>PowerPoint for Mac</h3>
+      <ol>
+        <li>Copy <code>manifest.xml</code> into <code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/</code> (create the <code>wef</code> folder if it is not there).</li>
+        <li>Quit PowerPoint completely (<kbd>⌘Q</kbd>) and reopen it.</li>
+        <li>Open a deck, then <strong>Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager</strong>. After that first launch a <strong>Font Manager</strong> button stays on the Home tab.</li>
+      </ol>
+
+      <h3>PowerPoint on the web, and Microsoft 365 on Windows</h3>
+      <ol>
+        <li><strong>Home ▸ Add-ins ▸ More Add-ins</strong> (or <strong>Insert ▸ Add-ins</strong>), then <strong>My Add-ins ▸ Upload My Add-in</strong>.</li>
+        <li>Pick the downloaded <code>manifest.xml</code>. The pane opens from the Home tab.</li>
+      </ol>
+      <p class="fine">Older Windows builds without <em>Upload My Add-in</em> sideload from a <a href="https://learn.microsoft.com/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">trusted folder catalog</a>; the repo has a script for it (<code>scripts/sideload-windows.ps1</code>), untested so far.</p>
+
+      <h2>What it does, and does not, do</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Reads the deck in place</h3>
+          <p>PowerPoint hands the add-in the open presentation's bytes directly (<code>getFileAsync</code>). Nothing is uploaded anywhere. A large deck takes a few seconds — it is PowerPoint serialising the file, not a network round trip.</p>
+        </div>
+        <div class="card">
+          <h3>Checks what is installed here</h3>
+          <p>Office exposes no installed-font list, so the check is the same canvas width-probe the web tool uses: accurate for <em>is this family present</em>. On Windows a font installed after PowerPoint launched reads as missing until PowerPoint is reopened; the pane says so.</p>
+        </div>
+        <div class="card">
+          <h3>Fetches the missing ones</h3>
+          <p>Real files from Google Fonts and Fontsource where a licence allows; metric-compatible stand-ins for Calibri, Cambria, Arial and friends; Adobe Fonts named and linked, never faked. Downloads arrive through PowerPoint's own Save dialog.</p>
+        </div>
+        <div class="card">
+          <h3>Never installs anything</h3>
+          <p>An add-in is a webview and cannot write to your Fonts folder. It gives you the files; installing is a double-click. The desktop build of the web tool is the one that installs outright.</p>
+        </div>
+      </div>
+
+      <p class="fine">Open source under the MIT licence. The scanner is vendored from <a href="https://github.com/stoatworks-labs/pptx-font-manager">pptx-font-manager</a> and imported unchanged, so the two tools cannot disagree about a deck.</p>
+    </main>
+    <script type="module" src="/src/index.ts"></script>
+    <script src="/support-footer.js" defer
+            data-app="Font Manager for PowerPoint"
+            data-repo="https://github.com/stoatworks-labs/pptx-font-manager-addin"
+            data-note="The add-in reads the open deck inside PowerPoint; nothing is uploaded, and the only network requests are the font downloads you ask for."></script>
+  </body>
+</html>

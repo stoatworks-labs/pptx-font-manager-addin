@@ -1,0 +1,45 @@
+# Cloudflare deployment for the PowerPoint Font Manager add-in.
+#
+# A static-assets-only Worker: no server code. PowerPoint loads taskpane.html
+# from this origin into its task pane (WKWebView on Mac, WebView2 on Windows,
+# an iframe in PowerPoint on the web) and everything — reading the deck through
+# Office.js, scanning it, probing installed fonts — happens inside that webview.
+# The only outbound requests are the font downloads the user asks for, made by
+# the webview directly to Google Fonts / Fontsource.
+#
+# The same origin serves /manifest.xml (the file a user sideloads) and / (an
+# install page). The manifest hard-codes this hostname, so the hostname is part
+# of the add-in's identity: move it and every installed copy breaks until the
+# user sideloads a new manifest. Do not rename casually.
+#
+# The fleet does NOT use Cloudflare Pages — `pages_build_output_dir` fails here
+# with "Could not detect a directory containing static files", which reads like a
+# missing build step and is really the wrong config key. Same shape as
+# pptx-font-manager, aspect-calc and pixel-peeker.
+#
+# Deploys are automatic: .github/workflows/deploy.yml runs `wrangler deploy` on
+# every push to main that touches something PowerPoint fetches. `cf-run npx
+# wrangler deploy` still works from a laptop and is the fallback when Actions is
+# down. There is NO Cloudflare-side build connected to this repo — two things
+# deploying the same Worker is worse than one.
+#
+# `public/_headers` is copied into dist/ by Vite and carries the CSP; the assets
+# runtime honours it. That CSP is deliberately different from the rest of the
+# fleet's — see the notes in the file — because an Office add-in loads Office.js
+# from Microsoft's CDN and is framed by PowerPoint on the web.
+#
+# `name` must match the Cloudflare project.
+
+name = "pptx-font-manager-addin"
+compatibility_date = "2026-07-30"
+
+[assets]
+directory = "./dist"
+
+# The public hostname, declared here rather than clicked into the dashboard.
+# `custom_domain = true` makes wrangler create the DNS record and the Worker
+# custom domain on deploy, so the hostname is reproducible from the repo and
+# cannot drift from what is actually serving.
+[[routes]]
+pattern = "pptx-font-manager-addin.stoatworks-labs.com"
+custom_domain = true

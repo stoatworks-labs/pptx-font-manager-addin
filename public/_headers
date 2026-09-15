@@ -1,0 +1,50 @@
+# Response headers for the hosted add-in (Cloudflare assets runtime).
+#
+# This CSP is NOT the fleet's usual one, on purpose — three differences, each of
+# which would break the add-in if "fixed" back to the house pattern:
+#
+#   script-src      Office.js is loaded from https://appsforoffice.microsoft.com
+#                   (taskpane.html), and at runtime it pulls its host-specific
+#                   bundle and its locale strings from the same host. Microsoft
+#                   requires the CDN copy — a self-hosted office.js is not
+#                   supported and is rejected by AppSource.
+#
+#   frame-ancestors PowerPoint on the web puts the task pane in an iframe served
+#                   by Microsoft's Office hosts. The fleet's `frame-ancestors
+#                   'none'` (and X-Frame-Options: DENY, deliberately absent here)
+#                   would make the pane render blank there. Desktop PowerPoint
+#                   loads the pane as a top-level document and does not care.
+#
+#   connect-src     Where the font files come from — same as pptx-font-manager:
+#                     raw.githubusercontent.com  Google Fonts, the complete .ttf files
+#                     cdn.jsdelivr.net           Fontsource, the families Google lacks
+#                   NOT fonts.googleapis.com: the CSS API serves subsetted woff2,
+#                   useless for installation. appsforoffice.microsoft.com is here
+#                   for the same reason it is in script-src. intake.stoatworks-labs.com
+#                   is the install page's feedback button.
+#
+# Deliberately NOT allowed: Office.js also tries to open an iframe on
+# https://telemetryservice.firstpartyapps.oaspapps.com/ — Microsoft's add-in
+# usage telemetry. frame-src is left to fall back to default-src 'self', so that
+# frame is refused (one CSP error in the console) and the add-in runs without
+# it. Nothing the pane does depends on it.
+#
+# A too-narrow CSP fails only in production, where _headers applies and the dev
+# server's absence of it hides the problem — check with `npm run serve:dist`.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: default-src 'self'; worker-src 'self'; manifest-src 'self'; script-src 'self' https://appsforoffice.microsoft.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data: blob:; connect-src 'self' https://raw.githubusercontent.com https://cdn.jsdelivr.net https://appsforoffice.microsoft.com https://intake.stoatworks-labs.com; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'self' https://*.officeapps.live.com https://*.office.com https://*.office.net https://*.cloud.microsoft https://*.microsoft.com https://*.sharepoint.com https://*.live.com
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Office caches task-pane pages hard. Making the HTML revalidate means a new
+# deploy is picked up the next time the pane opens, instead of whenever the
+# host feels like it; everything the page references is content-hashed anyway.
+/taskpane.html
+  Cache-Control: no-cache
+
+# The manifest is what a user downloads to install. Never let it be served stale.
+/manifest.xml
+  Cache-Control: no-cache
