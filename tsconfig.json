@@ -10,9 +10,8 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "noEmit": true,
-    "baseUrl": ".",
     "paths": {
-      "@fm/*": ["vendor/pptx-font-manager/src/*"]
+      "@fm/*": ["./vendor/pptx-font-manager/src/*"]
     }
   },
   "include": ["src", "vite.config.ts"],
