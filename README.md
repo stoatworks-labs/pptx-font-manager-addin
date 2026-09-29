@@ -1,7 +1,7 @@
 # Font Manager for PowerPoint (add-in)
 
-> **AI-assisted project.** Built with [Claude](https://claude.com/claude-code),
-> directed and reviewed by a human. The whole path — get the deck bytes, scan
+> **AI-assisted project.** This codebase was created with [Claude](https://claude.com/claude-code)
+> (Anthropic), directed and reviewed by a human author. The whole path — get the deck bytes, scan
 > them, probe what's installed, fetch a missing font and save it — is **verified
 > running inside real PowerPoint for Mac** (16.112, WKWebView). PowerPoint for
 > Windows and PowerPoint on the web are in the manifest's host list but have
