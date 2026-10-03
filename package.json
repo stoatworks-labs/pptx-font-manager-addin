@@ -24,9 +24,9 @@
     "fflate": "^0.8.2"
   },
   "devDependencies": {
-    "@types/office-js": "^1.0.377",
-    "office-addin-dev-certs": "^3.0.0",
-    "office-addin-manifest": "^3.0.0",
+    "@types/office-js": "^1.0.610",
+    "office-addin-dev-certs": "^3.0.1",
+    "office-addin-manifest": "^3.0.1",
     "typescript": "^7.0.2",
     "vite": "^8.3.0",
     "vitest": "^5.0.1"
