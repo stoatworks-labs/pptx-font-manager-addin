@@ -195,3 +195,7 @@ scripts/              sideload for Mac (wef) and Windows (trusted catalog); serv
 test/                 getFileAsync reassembly; manifest.xml is the production manifest
 vendor/pptx-font-manager/  the scanner, via git subtree
 ```
+
+<!-- attributions:start -->
+This project is built on other people's work — see [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+<!-- attributions:end -->
