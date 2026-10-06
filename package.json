@@ -1,7 +1,7 @@
 {
   "name": "pptx-font-manager-addin",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "description": "A PowerPoint task-pane add-in that scans the open deck for the fonts it actually uses, checks which are installed on this machine, and offers the missing ones as real downloads, metric-compatible substitutes, or a sidecar bundle. Reuses the pptx-font-manager scanner verbatim.",
   "license": "MIT",
