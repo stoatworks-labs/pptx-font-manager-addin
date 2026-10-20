@@ -22,6 +22,16 @@ Same fleet, copied rather than shared: src/core, src/lib, src/platform and src/d
 
 Libraries, SDKs and frameworks the project is built on or bundles.
 
+### fflate
+
+<https://github.com/101arrowz/fflate>  
+Licence: MIT  
+Copyright: Arjun Barrett
+
+An npm dependency, bundled into the page.
+
+Zip and deflate in plain JavaScript, fast enough to use in a browser. Office documents, OpenDocument files and most multi-file downloads are zip packages underneath.
+
 ### The npm ecosystem
 
 <https://www.npmjs.com>  
