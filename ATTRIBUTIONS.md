@@ -1,6 +1,6 @@
 # Attributions
 
-pptx-font-manager is built on other people's work. This file lists what that work is, who did
+PowerPoint Font Manager is built on other people's work. This file lists what that work is, who did
 it, and what it is doing here.
 
 It is generated — the master lists live in the `stoatworks-backend` repo and are
@@ -16,9 +16,9 @@ Libraries, SDKs and frameworks the project is built on or bundles.
 Licence: MIT or Apache-2.0  
 Copyright: The Tauri Programme within The Commons Conservancy
 
-A Cargo and npm dependency.
+A Cargo and npm dependency — of the app itself under src-tauri/, or of the desktop launcher under launcher/src-tauri/.
 
-Puts a web front end on a native Rust core using the platform's own webview, so the binary stays small and the DSP stays in Rust.
+Wraps a web front end in a native desktop app using the platform's own webview rather than a bundled browser, so the binary stays small.
 
 ### React
 
@@ -29,6 +29,26 @@ Copyright: Meta Platforms, Inc. and affiliates
 An npm dependency.
 
 The UI layer for the browser tools and the Electron and Tauri front ends.
+
+### fflate
+
+<https://github.com/101arrowz/fflate>  
+Licence: MIT  
+Copyright: Arjun Barrett
+
+An npm dependency, bundled into the page.
+
+Zip and deflate in plain JavaScript, fast enough to use in a browser. Office documents, OpenDocument files and most multi-file downloads are zip packages underneath.
+
+### The Rust crate ecosystem
+
+<https://crates.io>  
+Licence: predominantly MIT or Apache-2.0  
+Copyright: the individual crate authors
+
+Cargo dependencies, resolved and pinned in Cargo.lock.
+
+Async runtimes, protocol codecs, serialisation and GUI toolkits. The exact set and versions for any build are in that repo's Cargo.lock, which is the authoritative list.
 
 ### The npm ecosystem
 
