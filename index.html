@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Font Manager for PowerPoint — add-in</title>
-    <meta name="description" content="A PowerPoint add-in that scans the open deck for the fonts it actually uses, checks which are installed on this machine, and fetches the missing ones. Install it by sideloading one manifest file." />
+    <meta name="description" content="A PowerPoint add-in that scans the open deck for the fonts it actually uses, checks which are installed on this machine, and fetches the missing ones. Installs with a double-click on Mac and Windows." />
     <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
     <meta property="og:title" content="Font Manager for PowerPoint — add-in" />
     <meta property="og:description" content="Which fonts does this deck actually use, and which are missing here? Answered inside PowerPoint, with the missing ones a click away." />
@@ -35,7 +35,7 @@
       a { color: var(--brand); }
       code, kbd { font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background: var(--card); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; overflow-wrap: anywhere; }
       .lede { font-size: 17px; }
-      .cta { display: inline-flex; align-items: center; gap: 8px; margin: 12px 0 4px; padding: 10px 16px; border-radius: 6px; background: var(--brand); color: var(--brand-ink); font-weight: 600; text-decoration: none; }
+      .cta { display: inline-flex; align-items: center; gap: 8px; margin: 12px 8px 4px 0; padding: 10px 16px; border-radius: 6px; background: var(--brand); color: var(--brand-ink); font-weight: 600; text-decoration: none; }
       .cta:hover { filter: brightness(1.08); }
       .meta { color: var(--muted); font-size: 13px; margin-top: 6px; }
       .card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin: 10px 0; }
@@ -59,30 +59,37 @@
 
       <p>It is the same scanner as the <a href="https://pptx-font-manager.stoatworks-labs.com">PowerPoint Font Manager web tool</a>, run on the open presentation instead of a file you drop in. It ignores the thirty-odd script-fallback fonts every Office theme names whether or not a single such character appears, and it resolves face names — “Helvetica Neue Medium”, “Poppins Regular” — to the families they belong to before it calls anything missing.</p>
 
-      <a class="cta" href="/manifest.xml" download="manifest.xml">Download manifest.xml</a>
-      <p class="meta">One small XML file. It points PowerPoint at this site; nothing is installed on your machine. <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin">Source and issues on GitHub</a> · <a href="https://stoatworks-labs.com/software/pptx-font-manager-addin/">Project page</a></p>
+      <a class="cta" href="https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint.pkg">Download for Mac</a>
+      <a class="cta" href="https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint-Setup.exe">Download for Windows</a>
+      <p class="meta">A small installer that adds the add-in to PowerPoint for your account, with no admin password. The add-in itself runs from this site, so it keeps itself up to date. PowerPoint on the web: <a href="/manifest.xml" download="manifest.xml">manifest.xml</a>. <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin">Source and issues on GitHub</a> · <a href="https://stoatworks-labs.com/software/pptx-font-manager-addin/">Project page</a></p>
 
       <div class="card status">
         <h3>Where it has been proven</h3>
-        <p>Verified end to end in <strong>PowerPoint for Mac</strong> (16.112): reading the open deck, scanning it, checking installed fonts, and saving a fetched font through the native Save dialog. <strong>PowerPoint for Windows and PowerPoint on the web are supported by the manifest but have not been tested yet.</strong> If you try either, <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/issues">say how it went</a>.</p>
+        <p>Verified end to end in <strong>PowerPoint for Mac</strong> (16.112): the installer and uninstaller, reading the open deck, scanning it, checking installed fonts, and saving a fetched font through the native Save dialog. <strong>The Windows installer, PowerPoint for Windows and PowerPoint on the web haven't been tested yet.</strong> If you try any of them, <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/issues">say how it went</a>.</p>
       </div>
 
       <h2>Install</h2>
-      <p>Office add-ins install from a manifest. Download the file above, then:</p>
 
       <h3>PowerPoint for Mac</h3>
       <ol>
-        <li>Copy <code>manifest.xml</code> into <code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/</code> (create the <code>wef</code> folder if it is not there).</li>
-        <li>Quit PowerPoint completely (<kbd>⌘Q</kbd>) and reopen it.</li>
-        <li>Open a deck, then <strong>Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager</strong>. That also puts a <strong>Font Manager</strong> button on the Home tab until PowerPoint quits; next time, start from <strong>Home ▸ Add-ins</strong> again.</li>
+        <li>Open <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint.pkg"><code>Font-Manager-for-PowerPoint.pkg</code></a>. It's signed and notarised, installs for your account only (no admin password), and asks to quit PowerPoint if it's open. PowerPoint has to have been opened at least once on this Mac.</li>
+        <li>Open PowerPoint and a deck, then <strong>Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager</strong>. That also puts a <strong>Font Manager</strong> button on the Home tab until PowerPoint quits; next time, start from <strong>Home ▸ Add-ins</strong> again.</li>
+        <li>To remove it, open <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Uninstall-Font-Manager-for-PowerPoint.pkg"><code>Uninstall-Font-Manager-for-PowerPoint.pkg</code></a>.</li>
       </ol>
 
-      <h3>PowerPoint on the web, and Microsoft 365 on Windows</h3>
+      <h3>PowerPoint for Windows</h3>
       <ol>
-        <li><strong>Home ▸ Add-ins ▸ More Add-ins</strong> (or <strong>Insert ▸ Add-ins</strong>), then <strong>My Add-ins ▸ Upload My Add-in</strong>.</li>
-        <li>Pick the downloaded <code>manifest.xml</code>. The pane opens from the Home tab.</li>
+        <li>Close PowerPoint and run <a href="https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint-Setup.exe"><code>Font-Manager-for-PowerPoint-Setup.exe</code></a>. It installs for your account only, with no administrator prompt. It isn't code-signed yet, so SmartScreen will say it doesn't recognise it: <strong>More info ▸ Run anyway</strong>.</li>
+        <li>Open PowerPoint and a deck. Font Manager has a button on the Home tab; if it isn't there, choose <strong>Home ▸ Add-ins</strong> and pick it from your add-ins.</li>
+        <li>To remove it, uninstall <strong>Font Manager for PowerPoint</strong> from <strong>Settings ▸ Apps ▸ Installed apps</strong>.</li>
       </ol>
-      <p class="fine">Older Windows builds without <em>Upload My Add-in</em> sideload from a <a href="https://learn.microsoft.com/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins">trusted folder catalog</a>; the repo has a script for it (<code>scripts/sideload-windows.ps1</code>), untested so far.</p>
+
+      <h3>PowerPoint on the web</h3>
+      <ol>
+        <li>Download <a href="/manifest.xml" download="manifest.xml"><code>manifest.xml</code></a>.</li>
+        <li><strong>Home ▸ Add-ins ▸ More Add-ins</strong> (or <strong>Insert ▸ Add-ins</strong>), then <strong>My Add-ins ▸ Upload My Add-in</strong>, and pick it. The pane opens from the Home tab. The same works in Microsoft 365 on Windows if you'd rather not run an installer.</li>
+      </ol>
+      <p class="fine">All the installers do is put <code>manifest.xml</code> where PowerPoint looks for add-ins: on a Mac, <code>~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/</code>; on Windows, a registry value under <code>HKCU\Software\Microsoft\Office\16.0\Wef\Developer</code>. Doing it by hand works just as well.</p>
 
       <h2>What it does, and does not, do</h2>
       <div class="grid">

@@ -19,38 +19,60 @@ Microsoft 365**, and the manifest validator confirms the set.
 
 ## Install
 
-The add-in is hosted at **https://pptx-font-manager-addin.stoatworks-labs.com**.
-Installing it means handing PowerPoint one file, `manifest.xml`, that points at
-that origin. Nothing else lands on your machine, and every deploy reaches every
-installed copy.
+Run the installer for your machine. Each one adds Font Manager to PowerPoint for
+your user account only, with no admin password, and needs PowerPoint closed.
 
-1. Download [`manifest.xml`](https://pptx-font-manager-addin.stoatworks-labs.com/manifest.xml)
-   (the same file is attached to every [release](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases)).
-2. **PowerPoint for Mac:** copy it into
-   `~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/` (create
-   `wef` if needed), quit PowerPoint completely and reopen it, then
-   **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**. That also puts a
-   *Font Manager* button on the Home tab, but only until PowerPoint quits: the
-   next time, it's Home ▸ Add-ins again.
-3. **PowerPoint on the web, and Microsoft 365 on Windows:**
-   **Home ▸ Add-ins ▸ More Add-ins ▸ My Add-ins ▸ Upload My Add-in**, then pick the
-   file. Older Windows builds without *Upload My Add-in* sideload from a
-   [trusted folder catalog](https://learn.microsoft.com/office/dev/add-ins/testing/create-a-network-shared-folder-catalog-for-task-pane-and-content-add-ins);
-   `scripts/sideload-windows.ps1 -Hosted` sets one up (untested so far).
+- **Mac:** [`Font-Manager-for-PowerPoint.pkg`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint.pkg),
+  signed and notarised. Open PowerPoint and a deck, then
+  **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**. That also puts a
+  *Font Manager* button on the Home tab, but only until PowerPoint quits: the
+  next time, it's Home ▸ Add-ins again. To remove it, run
+  [`Uninstall-Font-Manager-for-PowerPoint.pkg`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Uninstall-Font-Manager-for-PowerPoint.pkg).
+- **Windows:** [`Font-Manager-for-PowerPoint-Setup.exe`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint-Setup.exe).
+  It isn't code-signed yet, so SmartScreen will say it doesn't recognise it
+  (**More info ▸ Run anyway**). Remove it from **Settings ▸ Apps ▸ Installed apps**.
+  Untested on a real Windows PowerPoint so far.
+- **PowerPoint on the web** (or Microsoft 365 on Windows without the installer):
+  download [`manifest.xml`](https://pptx-font-manager-addin.stoatworks-labs.com/manifest.xml),
+  then **Home ▸ Add-ins ▸ More Add-ins ▸ My Add-ins ▸ Upload My Add-in**.
 
-The install page at the origin's root says the same thing.
+The add-in itself is hosted at **https://pptx-font-manager-addin.stoatworks-labs.com**,
+and all an installer does is point PowerPoint there (see [Installers](#installers)),
+so every deploy reaches every installed copy and nobody re-runs an installer to
+update. The install page at that address says the same thing.
 
 <!-- downloads:start -->
 
 ## Download
 
-**[v0.1.1](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/tag/v0.1.1)**
+**[v0.2.0](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/tag/v0.2.0)** — prebuilt for macOS and Windows. Pick your platform:
 
-This release contains:
+<details>
+<summary><b>macOS</b></summary>
 
-- [`manifest.xml`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/manifest.xml) — Office add-in manifest (sideload into PowerPoint), 5 KB
+| Build | Download | Size |
+| --- | --- | --- |
+| .pkg installer | [`Font-Manager-for-PowerPoint.pkg`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint.pkg) | 21 KB |
+
+</details>
+
+<details>
+<summary><b>Windows</b></summary>
+
+| Build | Download | Size |
+| --- | --- | --- |
+| .exe installer | [`Font-Manager-for-PowerPoint-Setup.exe`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint-Setup.exe) | 182 KB |
+
+</details>
+
+Also in this release:
+
+- [`manifest.xml`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/manifest.xml) — Office add-in manifest (for PowerPoint on the web), 5 KB
+- [`Uninstall-Font-Manager-for-PowerPoint.pkg`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Uninstall-Font-Manager-for-PowerPoint.pkg) — Uninstaller for macOS (.pkg), 20 KB
 
 All builds, checksums and release notes: [github.com/stoatworks-labs/pptx-font-manager-addin/releases](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases).
+
+The Windows builds are unsigned, so SmartScreen warns once.
 
 <!-- downloads:end -->
 
