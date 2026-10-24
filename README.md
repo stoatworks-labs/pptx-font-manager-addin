@@ -154,9 +154,73 @@ production.
 
 **Releasing:** bump `package.json` (and the lockfile), commit, tag `vX.Y.Z`, push
 the tag. `release.yml` checks the tag against `package.json`, validates the
-manifest and attaches it to a published GitHub release. Then run
-`stoatworks-backend/release/gen-downloads.py --repo pptx-font-manager-addin` to
-refresh the Download block above and the website's `downloads.json`.
+manifest, builds the Windows installer and attaches both to a published GitHub
+release. Then, on the Mac with the signing identity, `npm run installer:mac` and
+`gh release upload vX.Y.Z release/*.pkg` add the Mac installer and uninstaller.
+Last, run `stoatworks-backend/release/gen-downloads.py --repo pptx-font-manager-addin`
+to refresh the Download block above and the website's `downloads.json`.
+
+## Installers
+
+Slido has a proper installer, so people expect one. Slido can do that because
+its PowerPoint add-in is the old kind (VBA plus a native library on the Mac,
+COM on Windows), and PowerPoint loads those from a folder by design. This is an
+Office.js add-in, and Microsoft supports exactly two ways of installing one:
+Microsoft Marketplace, and an organisation's admin pushing it from the Microsoft
+365 admin centre. Everything else is what Microsoft calls sideloading, "not for
+production".
+
+So the installers automate the sideload, and that's all they do:
+
+| | Mac | Windows |
+| --- | --- | --- |
+| File | `Font-Manager-for-PowerPoint.pkg` | `Font-Manager-for-PowerPoint-Setup.exe` |
+| What it does | copies `manifest.xml` into `~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/` as `stoatworks-font-manager.xml` | copies it to `%LOCALAPPDATA%\Programs\Stoatworks\Font Manager for PowerPoint\` and sets `HKCU\Software\Microsoft\Office\16.0\Wef\Developer`, value `<add-in Id>` = that path |
+| Same as | Microsoft's `office-addin-dev-settings` on a Mac | the same tool on Windows (read from its 4.0.1 source); not the network-share catalog `sideload-windows.ps1` sets up |
+| Rights | your account only, no admin password | your account only, no UAC prompt |
+| PowerPoint open? | Installer asks to quit it (`must-close`) | asks you to close it, then Retry |
+| Uninstall | `Uninstall-Font-Manager-for-PowerPoint.pkg` | Settings ▸ Apps ▸ Installed apps |
+| Signed | Developer ID Installer, notarised and stapled | no: SmartScreen will warn |
+
+Both remove any other copy of the add-in (matched on its `<Id>`, so the old
+sideload script's file goes, and nothing else in the folder is touched) before
+adding theirs, and the Mac one refuses politely if PowerPoint isn't installed or
+has never been opened (its sandbox container, where `wef` lives, doesn't exist
+until then). Because the manifest only points at the hosted pane, nobody needs
+to run an installer again unless `manifest.xml` itself changes.
+
+```bash
+npm run installer:mac            # sign + notarise from ~/.config/stoatworks/release-signing.env
+npm run installer:mac:unsigned   # quick local build
+npm run installer:windows        # needs makensis (brew install makensis)
+```
+
+What has been run, 2026-10-24, on macOS 26.4.1 with PowerPoint for Mac 16.112.3:
+
+- **Mac, from the command line** (`installer -pkg … -target CurrentUserHomeDirectory`,
+  no password): install swapped the old script copy for the new file, byte for
+  byte the same manifest; the Advanced Exporter's manifest beside it was left
+  alone; uninstall removed it; a second uninstall said there was nothing to
+  remove. Payload-free packages leave no receipt.
+- **Mac, in Installer.app**, from a copy carrying a browser's quarantine flag:
+  Gatekeeper accepts it (`source=Notarized Developer ID`), it goes straight to a
+  home-folder install with no password, and it asks to close PowerPoint. The
+  install was cancelled at that prompt, so **the GUI install itself, and
+  PowerPoint picking the add-in up afterwards, are not yet checked.**
+- **Windows: not run at all.** It compiles with warnings as errors, and its
+  payload unpacks to the identical manifest. Whether PowerPoint for Windows
+  shows a Developer-key add-in on the Home tab, or only under Add-ins, is
+  unverified.
+
+Two build traps:
+
+- **makensis needs a UTF-8 locale.** With `LANG` unset (or `LC_ALL=C`),
+  Homebrew's 3.12 dies with `std::bad_alloc` before reading a line, even on an
+  empty script. `build-exe.sh` sets one.
+- **The .pkg carries `._manifest.xml` and `._postinstall`.** macOS 26 stamps every
+  new file with `com.apple.provenance`, `xattr -c` cannot remove it, and
+  `pkgbuild` archives it as AppleDouble whatever `COPYFILE_DISABLE` says. They're
+  inert: the script only opens `manifest.xml` by name.
 
 ## Findings
 
@@ -193,7 +257,9 @@ public/icons/         ribbon icons (rendered from pptx-font-manager's icon.svg)
 public/_headers       CSP and caching for the Cloudflare assets runtime
 wrangler.toml         the Worker and its custom domain
 scripts/              sideload for Mac (wef) and Windows (trusted catalog); serve-dist.py
-test/                 getFileAsync reassembly; manifest.xml is the production manifest
+installer/mac/        the .pkg installer and uninstaller: postinstall scripts, distributions, pages
+installer/windows/    the NSIS Setup.exe script and its build script
+test/                 getFileAsync reassembly; manifest.xml is the production manifest; installer scripts
 vendor/pptx-font-manager/  the scanner, via git subtree
 ```
 

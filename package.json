@@ -18,6 +18,9 @@
     "sideload:mac": "bash scripts/sideload-mac.sh",
     "sideload:mac:hosted": "bash scripts/sideload-mac.sh --hosted",
     "sideload:windows": "pwsh scripts/sideload-windows.ps1",
+    "installer:mac": "bash installer/mac/build-pkg.sh",
+    "installer:mac:unsigned": "bash installer/mac/build-pkg.sh --unsigned",
+    "installer:windows": "bash installer/windows/build-exe.sh",
     "core:pull": "git subtree pull --prefix=vendor/pptx-font-manager https://github.com/stoatworks-labs/pptx-font-manager.git main --squash"
   },
   "dependencies": {

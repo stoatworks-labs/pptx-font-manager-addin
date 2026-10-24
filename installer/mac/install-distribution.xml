@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Distribution for "Font Manager for PowerPoint.pkg". build-pkg.sh fills in
+  the version from package.json. The component package has no payload: its
+  postinstall copies the manifest into PowerPoint's wef folder.
+
+  Installs for the current user only (no admin password): the wef folder is in
+  the user's own PowerPoint container, and an add-in sideloaded there is that
+  user's alone.
+-->
+<installer-gui-script minSpecVersion="2">
+  <title>Font Manager for PowerPoint</title>
+  <organization>com.stoatworks</organization>
+  <domains enable_anywhere="false" enable_currentUserHome="true" enable_localSystem="false"/>
+  <options customize="never" require-scripts="true" rootVolumeOnly="false" hostArchitectures="arm64,x86_64"/>
+  <welcome file="install-welcome.html" mime-type="text/html"/>
+  <conclusion file="install-conclusion.html" mime-type="text/html"/>
+  <installation-check script="checkPowerPoint()"/>
+  <script><![CDATA[
+function checkPowerPoint() {
+  if (!system.applications.fromIdentifier('com.microsoft.Powerpoint')) {
+    my.result.type = 'Fatal';
+    my.result.title = 'PowerPoint isn’t installed';
+    my.result.message = 'Font Manager is an add-in for Microsoft PowerPoint for Mac. Install PowerPoint, open it once, then run this installer again.';
+    return false;
+  }
+  // The wef folder lives in PowerPoint's sandbox container, which PowerPoint
+  // creates the first time it runs. Making it by hand before then is asking
+  // for a container macOS doesn't recognise.
+  var home = system.env.HOME;
+  if (home && !system.files.fileExistsAtPath(home + '/Library/Containers/com.microsoft.Powerpoint')) {
+    my.result.type = 'Fatal';
+    my.result.title = 'Open PowerPoint once first';
+    my.result.message = 'PowerPoint hasn’t been opened on this account yet, so it has nowhere to keep add-ins. Open PowerPoint, quit it, then run this installer again.';
+    return false;
+  }
+  return true;
+}
+  ]]></script>
+  <choices-outline>
+    <line choice="default">
+      <line choice="com.stoatworks.pptx-font-manager-addin.install"/>
+    </line>
+  </choices-outline>
+  <choice id="default"/>
+  <choice id="com.stoatworks.pptx-font-manager-addin.install" visible="false">
+    <pkg-ref id="com.stoatworks.pptx-font-manager-addin.install"/>
+  </choice>
+  <pkg-ref id="com.stoatworks.pptx-font-manager-addin.install" version="@VERSION@" onConclusion="none">install-component.pkg</pkg-ref>
+  <!-- PowerPoint reads the wef folder at launch, so it has to be closed. -->
+  <pkg-ref id="com.stoatworks.pptx-font-manager-addin.install">
+    <must-close>
+      <app id="com.microsoft.Powerpoint"/>
+    </must-close>
+  </pkg-ref>
+</installer-gui-script>
