@@ -23,7 +23,9 @@ Run the installer for your machine. Each one adds Font Manager to PowerPoint for
 your user account only, with no admin password, and needs PowerPoint closed.
 
 - **Mac:** [`Font-Manager-for-PowerPoint.pkg`](https://github.com/stoatworks-labs/pptx-font-manager-addin/releases/latest/download/Font-Manager-for-PowerPoint.pkg),
-  signed and notarised. Open PowerPoint and a deck, then
+  signed and notarised. When macOS asks whether Installer may access data from
+  other apps, choose **Allow**: that's it reaching PowerPoint's add-ins folder.
+  Open PowerPoint and a deck, then
   **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**. That also puts a
   *Font Manager* button on the Home tab, but only until PowerPoint quits: the
   next time, it's Home ▸ Add-ins again. To remove it, run
@@ -232,8 +234,16 @@ What has been run, 2026-10-24, on macOS 26.4.1 with PowerPoint for Mac 16.112.3:
   straight to a home-folder install with no password. With PowerPoint open, the
   uninstaller asked to close it, **Close Application and Install** quit
   PowerPoint, and the file came out, the Exporter's left alone. With PowerPoint
-  closed, the installer put it back. No privacy prompt for writing into
-  PowerPoint's container either way.
+  closed, the installer put it back.
+- **macOS asks first, every time.** Both runs raised "Installer would like to
+  access data from other apps" (TCC `kTCCServiceSystemPolicyAppData`, logged
+  at 15:58:55 and 16:01:06): writing into PowerPoint's sandbox container counts
+  as another app's data. Allow was clicked both times and the grant was
+  withdrawn as soon as each install ended, so expect the prompt on every
+  install and uninstall. What happens on Don't Allow hasn't been tried; the
+  postinstall can't write the file, so expect a failed install. The install
+  page and the steps above say to choose Allow. (An earlier note here said there
+  was no prompt; the window was on another Space and the log says otherwise.)
 - **That run found a bug:** the first build's installation check used
   `system.applications.fromIdentifier()`, which only sees *running* apps, so
   with PowerPoint closed it said PowerPoint wasn't installed. It checks the files
