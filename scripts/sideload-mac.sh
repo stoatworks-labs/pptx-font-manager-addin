@@ -14,9 +14,9 @@
 # Both copies carry the same add-in <Id>, so PowerPoint treats them as the same
 # add-in: sideload one or the other, never both at once.
 #
-# NOTE: the custom Home-tab button may only appear after you launch the add-in
-# once from  Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager  — a known
-# wef-sideload quirk. After that first launch the ribbon button sticks.
+# NOTE: the custom Home-tab button appears only once the add-in has been opened
+# from  Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager, and is gone again
+# after PowerPoint relaunches (PowerPoint for Mac 16.112.3, 2026-10-24).
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 WEF="$HOME/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef"

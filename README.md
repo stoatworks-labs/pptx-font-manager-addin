@@ -29,8 +29,9 @@ installed copy.
 2. **PowerPoint for Mac:** copy it into
    `~/Library/Containers/com.microsoft.Powerpoint/Data/Documents/wef/` (create
    `wef` if needed), quit PowerPoint completely and reopen it, then
-   **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**. After that first
-   launch a *Font Manager* button stays on the Home tab.
+   **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**. That also puts a
+   *Font Manager* button on the Home tab, but only until PowerPoint quits: the
+   next time, it's Home ▸ Add-ins again.
 3. **PowerPoint on the web, and Microsoft 365 on Windows:**
    **Home ▸ Add-ins ▸ More Add-ins ▸ My Add-ins ▸ Upload My Add-in**, then pick the
    file. Older Windows builds without *Upload My Add-in* sideload from a
@@ -117,9 +118,11 @@ npm run sideload:windows      # registers a trusted catalog folder (then restart
 
 Dev and hosted copies share the add-in `<Id>`, so PowerPoint treats them as one
 add-in: sideload one or the other, never both. On Mac the custom
-**Home ▸ Font Manager** button may only appear after you launch the add-in once
-via **Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**, which is a known
-wef-sideload quirk. After that first launch it sticks.
+**Home ▸ Font Manager** button appears only once the add-in has been opened via
+**Home ▸ Add-ins ▸ Developer Add-ins ▸ Font Manager**, and it doesn't survive a
+relaunch: measured on PowerPoint for Mac 16.112.3 (2026-10-24), under the old
+script's file name and the installer's alike. Store add-ins keep their buttons;
+sideloaded ones don't.
 
 ### Two version numbers, on purpose
 
@@ -215,10 +218,14 @@ What has been run, 2026-10-24, on macOS 26.4.1 with PowerPoint for Mac 16.112.3:
   now (the container, then `/Applications`), logs what it found to
   `/var/log/install.log` as `font-manager: HOME=… container=… app=…`, and
   `test/installer.test.ts` keeps `system.applications` calls out.
-- **Not yet checked: PowerPoint listing the add-in after a GUI install.**
-  PowerPoint relaunched with no Font Manager button on the Home tab, as expected
-  for a first launch after install. The Add-ins panel that should list it under
-  Developer Add-ins hasn't been looked at yet.
+- **PowerPoint after the GUI install:** Home ▸ Add-ins lists Font Manager under
+  Developer Add-ins, beside the Advanced Exporter. Opening it loads the pane
+  from the hosted site, and **Scan this presentation** works (2 used, 2 missing,
+  43 script-fallback names ignored on a blank deck), and a **Font Manager**
+  button appears on the Home tab. After a relaunch the button is gone again;
+  the same happened with the manifest under the old script's file name, so it's
+  PowerPoint (16.112.3), not the installer. Each session starts from Home ▸
+  Add-ins, and the installer's last page says so.
 - **Windows: not run at all.** It compiles with warnings as errors, and its
   payload unpacks to the identical manifest. Whether PowerPoint for Windows
   shows a Developer-key add-in on the Home tab, or only under Add-ins, is
