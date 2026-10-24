@@ -202,11 +202,23 @@ What has been run, 2026-10-24, on macOS 26.4.1 with PowerPoint for Mac 16.112.3:
   byte the same manifest; the Advanced Exporter's manifest beside it was left
   alone; uninstall removed it; a second uninstall said there was nothing to
   remove. Payload-free packages leave no receipt.
-- **Mac, in Installer.app**, from a copy carrying a browser's quarantine flag:
-  Gatekeeper accepts it (`source=Notarized Developer ID`), it goes straight to a
-  home-folder install with no password, and it asks to close PowerPoint. The
-  install was cancelled at that prompt, so **the GUI install itself, and
-  PowerPoint picking the add-in up afterwards, are not yet checked.**
+- **Mac, in Installer.app**, from copies carrying a browser's quarantine flag:
+  Gatekeeper accepts both (`source=Notarized Developer ID`), and each goes
+  straight to a home-folder install with no password. With PowerPoint open, the
+  uninstaller asked to close it, **Close Application and Install** quit
+  PowerPoint, and the file came out, the Exporter's left alone. With PowerPoint
+  closed, the installer put it back. No privacy prompt for writing into
+  PowerPoint's container either way.
+- **That run found a bug:** the first build's installation check used
+  `system.applications.fromIdentifier()`, which only sees *running* apps, so
+  with PowerPoint closed it said PowerPoint wasn't installed. It checks the files
+  now (the container, then `/Applications`), logs what it found to
+  `/var/log/install.log` as `font-manager: HOME=… container=… app=…`, and
+  `test/installer.test.ts` keeps `system.applications` calls out.
+- **Not yet checked: PowerPoint listing the add-in after a GUI install.**
+  PowerPoint relaunched with no Font Manager button on the Home tab, as expected
+  for a first launch after install. The Add-ins panel that should list it under
+  Developer Add-ins hasn't been looked at yet.
 - **Windows: not run at all.** It compiles with warnings as errors, and its
   payload unpacks to the identical manifest. Whether PowerPoint for Windows
   shows a Developer-key add-in on the Home tab, or only under Add-ins, is

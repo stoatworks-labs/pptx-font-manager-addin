@@ -75,6 +75,17 @@ describe.runIf(process.platform !== 'win32')('Mac installer scripts', () => {
   })
 })
 
+describe('Mac installer distribution', () => {
+  const dist = readFileSync(resolve(ROOT, 'installer/mac/install-distribution.xml'), 'utf8')
+
+  it('checks for PowerPoint by its files, not system.applications', () => {
+    // fromIdentifier() only finds a running app, so with PowerPoint closed the
+    // first build told people PowerPoint wasn't installed (2026-10-24).
+    expect(dist).not.toMatch(/system\.applications\.\w+\(/)
+    expect(dist).toMatch(/Library\/Containers\/com\.microsoft\.Powerpoint/)
+  })
+})
+
 describe('Windows installer script', () => {
   const nsi = readFileSync(resolve(ROOT, 'installer/windows/font-manager.nsi'), 'utf8')
 
