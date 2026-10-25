@@ -102,6 +102,11 @@ export type MediaPlacement =
       online: OnlineInfo
       /** How the deck reaches it. */
       via: 'online-video' | 'add-in' | 'flash' | 'hyperlink'
+      /**
+       * Recorded only as an `<iframe>` embed code, with no relationship
+       * behind it — nothing `embedOnlineVideos` can repoint at a file.
+       */
+      embedCodeOnly?: boolean
     })
 
 export interface EmbeddedMediaFile {
@@ -266,7 +271,11 @@ export function scanMedia(file: Uint8Array): MediaScanResult {
       let placed = false
       for (const rid of shape.rids) {
         const rel = relById.get(rid)
-        if (!rel || seen.has(rel.target)) continue
+        // PowerPoint for Mac writes the videoFile link of an embedded clip it
+        // has trimmed as an External relationship to "NULL" (16.112.3,
+        // 2026-10-24); the file itself is reached through p14:media. It is
+        // no link at all, not a video on somebody's disk.
+        if (!rel || seen.has(rel.target) || (rel.external && rel.target === 'NULL')) continue
         seen.add(rel.target)
         const kind = shape.kindHint ?? kindFromName(rel.target) ?? 'video'
         const base = { slide: slideNumber, shape: shape.name, kind, playback, ...extra }
@@ -302,6 +311,7 @@ export function scanMedia(file: Uint8Array): MediaScanResult {
           playback,
           ...extra,
           source: 'online',
+          embedCodeOnly: true,
           url: shape.webUrl,
           online: classifyUrl(shape.webUrl),
           via: 'online-video',
