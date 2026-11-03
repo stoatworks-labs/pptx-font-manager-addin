@@ -1,0 +1,17 @@
+# Font Manager for PowerPoint
+
+> The deck's real fonts, checked inside PowerPoint
+
+PowerPoint Font Manager as an Office add-in: a task pane inside PowerPoint that reads the open presentation directly, works out which fonts it actually uses, checks which of those are installed on the machine you're on, and offers the missing ones as downloads, metric-compatible stand-ins or a sidecar .zip. It's the same scanner as the web tool, vendored from that repository and imported unchanged, run on the deck you've got open instead of a file you drop in, so nothing's uploaded and there's no drag-and-drop.
+
+One manifest covers PowerPoint 2016+ on Windows, 2019+ on Mac, PowerPoint on the web and Microsoft 365. There's a double-click installer for Mac and Windows; all it does is point PowerPoint at the hosted build, so the add-in keeps itself up to date. This address is that hosted build: the page here is the install page, and PowerPoint loads the add-in's task pane from the same origin.
+
+It's verified end to end in PowerPoint for Mac. The Windows installer, PowerPoint for Windows and PowerPoint on the web haven't been tested yet.
+
+## Links
+
+- [Install page](https://pptx-font-manager-addin.stoatworks-labs.com/): installers, the manifest and the install steps
+- [manifest.xml](https://pptx-font-manager-addin.stoatworks-labs.com/manifest.xml)
+- [Project page](https://stoatworks-labs.com/software/pptx-font-manager-addin/)
+- [PowerPoint Font Manager web tool](https://pptx-font-manager.stoatworks-labs.com/): the same scanner, in a browser
+- [Source on GitHub](https://github.com/stoatworks-labs/pptx-font-manager-addin) (MIT)

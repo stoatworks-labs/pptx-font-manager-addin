@@ -17,6 +17,9 @@ turns up on the show machine looking nothing like it did on the presenter's lapt
 One add-in covers **PowerPoint 2016+ (Windows), 2019+ (Mac), on the web, and
 Microsoft 365**, and the manifest validator confirms the set.
 
+The [project page](https://stoatworks-labs.com/software/pptx-font-manager-addin/) has the
+downloads.
+
 ## Install
 
 Run the installer for your machine. Each one adds Font Manager to PowerPoint for
